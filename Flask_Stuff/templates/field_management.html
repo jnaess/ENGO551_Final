@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <table>
+        <thead>
+            <tr>
+                <th>Asset</th>
+                <th>ID</th>
+                <th>Class</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for asset in assets %}
+                <tr>
+                    <td>{{asset.name}}</td>
+                    <td>{{assets.id}}</td>
+                    <td>{{asset.employee}}</td>
+                    <td>Modify</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+<br>
+<p>Add New Asset</p>
+    <form action="/new_asset" method="post" id="new_asset_form">
+        Asset: <input type="text" name="name" id ="name"><br><br>
+        Class: <select name="class">
+                    <option disable selected>Class</option>
+                    <option>Employee</option>
+                    <option>Vehicle</option>
+                    <option>Equipment</option>
+                </select><br><br>
+        <input type="submit" value="Submit Review" />
+    </form>
+<br>
+
+{% endblock %}

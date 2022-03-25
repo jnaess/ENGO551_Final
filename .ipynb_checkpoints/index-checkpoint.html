@@ -3,27 +3,24 @@
 <head>
     <title>Simple Leaflet Map</title>
     <meta charset="utf-8" />
-    <link 
-        rel="stylesheet" 
-        href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"
-    />
-    <link 
-        rel="stylesheet" 
-        href="http://leaflet.github.io/Leaflet.draw/leaflet.draw.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"/>
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+    <script>
+    var bbox = turf.bbox(features);
+    </script>
 </head>
 <body>
     <div id="map" style="width: 600px; height: 400px"></div>
-
-    <script
+</body>
+    
+        <script
         src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
     </script>
-    <script
-        src="http://leaflet.github.io/Leaflet.draw/leaflet.draw.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
 
     <script>
-        var map = L.map('map').setView([-41.2858, 174.78682], 14);
+        var map = L.map('map').setView([51.0447, -114.0719], 10);
         mapLink = 
             '<a href="http://openstreetmap.org">OpenStreetMap</a>';
         L.tileLayer(
@@ -45,9 +42,20 @@
         map.on('draw:created', function (e) {
             var type = e.layerType,
                 layer = e.layer;
+                //options = {tolerance: 0.01, highQuality: false},
+                //simplified = turf.simplify(layer, options);
             drawnItems.addLayer(layer);
         });
+        
+        /*map.on(L.Draw.Event.CREATED; function (e) {
+               var type = e.layerType,
+                   layer = e.layer;
+               if (type === 'marker') {
+                   console.log("its a marker");
+               }
+               else{console.log("not a marker");
+               }
+            });*/
 
     </script>
-</body>
 </html>

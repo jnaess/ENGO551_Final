@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{% block title %}Field Management{% endblock %}
+      
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+{% endblock %}
+
+{% block content %}
+<style>
+    #map {
+        height: 40vh;
+        width: 50vw;
+        top: 7.5vh;
+        left: 7.5vw;
+        bottom: 7.5vh;
+        border-radius: 15px;
+        border: 4px solid black;
+      }
+</style>
+<div id="map" ></div>
+<br><br><br><br>
+    <form action="/new_crop" method="post" id="new_crop_form">
+        <input type="submit" value="Add New Crop">
+    </form>
+<br>
+
+<!-- leaflet js  -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    // Map initialization 
+    var map = L.map('map').setView([51.0447, -114.0719], 13);
+    
+    //osm layer
+    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    osm.addTo(map);
+
+
+    var marker, circle;
+    </script>
+{% endblock %}

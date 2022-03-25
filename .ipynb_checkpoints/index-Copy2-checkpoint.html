@@ -20,7 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
 
     <script>
-        var map = L.map('map').setView([51.0447, -114.0719], 10);
+        var map = L.map('map').setView([17.385044, 78.486671], 10);
         mapLink = 
             '<a href="http://openstreetmap.org">OpenStreetMap</a>';
         L.tileLayer(
@@ -47,15 +47,11 @@
             drawnItems.addLayer(layer);
         });
         
-        /*map.on(L.Draw.Event.CREATED; function (e) {
-               var type = e.layerType,
-                   layer = e.layer;
-               if (type === 'marker') {
-                   console.log("its a marker");
-               }
-               else{console.log("not a marker");
-               }
-            });*/
-
+        var latlngs = [[17.385044, 78.486671],
+                       [16.506174, 80.648015],
+                       [17.686816, 83.218482]];
+        
+        var polygon = L.polygon(latlngs, {color: 'red'});
+        polygon.addTo(map);
     </script>
 </html>

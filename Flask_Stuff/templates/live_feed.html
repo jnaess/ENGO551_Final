@@ -1,0 +1,124 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{% block title %}Live Feed{% endblock %}
+      
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+{% endblock %}
+
+{% block content %}
+<style>
+    #map {
+        height: 75vh;
+        width: 75vw;
+        top: 7.5vh;
+        left: 7.5vw;
+        bottom: 7.5vh;
+        border-radius: 15px;
+        border: 4px solid black;
+      }
+</style>
+<h1><span id="time"> </span></h1>
+<h1><span id="weather"> </span></h1>
+<h1><span id="temperature"> C </span></h1>
+
+<div id="map" ></div>
+<br><br><br><br>
+
+<br>
+
+<!-- leaflet js  -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    // Map initialization 
+    var map = L.map('map').setView([51.0447, -114.0719], 13);
+    
+    //osm layer
+    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    osm.addTo(map);
+
+
+    var marker, circle;
+    </script>
+
+<script>
+     `use strict`    
+function refreshTime() {
+  const timeDisplay = document.getElementById("time");
+  const dateString = new Date().toLocaleTimeString();
+  const formattedString = dateString.replace(", ", " - ");
+  timeDisplay.textContent = formattedString;
+}
+  setInterval(refreshTime, 1000);
+    
+
+
+function refreshWeather(){
+    var request = new XMLHttpRequest()
+    
+    const weatherDisplay = document.getElementById("weather");
+    const temperatureDisplay = document.getElementById("temperature");
+  
+    
+    request.open('GET', 'https://api.openweathermap.org/data/2.5/weather?lat=51.0447&lon=-114.0719&appid=9a73084d2a98c0a030fb47a70a83c69c', true)
+    
+    request.onload = function () {
+      // Begin accessing JSON data here
+      var data = JSON.parse(this.response)
+
+      if (request.status >= 200 && request.status < 400) {
+          
+          var weather = data.weather[0].main;
+          var temperature = String(data.main.temp - 273);
+            console.log(weather)
+            console.log(temperature)
+
+            weatherDisplay.textContent = weather;
+            temperatureDisplay.textContent = temperature;
+      } else {
+        console.log('error')
+      }
+        
+    }
+    request.send()
+}
+setInterval(refreshWeather, 10000); //once every 10 seconds
+    
+
+  /*  
+var request = new XMLHttpRequest()
+    
+const weatherDisplay = document.getElementById("weather");
+const temperatureDisplay = document.getElementById("temperature");
+  
+    
+request.open('GET', 'https://api.openweathermap.org/data/2.5/weather?lat=51.0447&lon=-114.0719&appid=9a73084d2a98c0a030fb47a70a83c69c', true)
+    
+request.onload = function () {
+      // Begin accessing JSON data here
+      var data = JSON.parse(this.response)
+
+      if (request.status >= 200 && request.status < 400) {
+          
+          //var weather = data.weather[0].main;
+          //var temperature = String(data.main.temp - 273);
+          console.log(data)
+            //console.log(weather)
+            //console.log(temperature)
+
+            //weatherDisplay.textContent = weather;
+            //temperatureDisplay.textContent = temperature;
+      } else {
+        console.log('error')
+      }
+        
+    }
+request.send()
+*/
+    
+</script>
+
+{% endblock %}
