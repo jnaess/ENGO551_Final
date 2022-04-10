@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<style>
+#messages
+{
+background-color:yellow;
+font-size:3;
+font-weight:bold;
+line-height:140%;
+}
+#status
+{
+background-color:red;
+font-size:4;
+font-weight:bold;
+color:white;
+line-height:140%;
+}
+    body {
+    margin: 0;
+    padding: 0;
+    background-color: #F4FDFF;
+    font-family: Arial;
+  }
+
+      #map {
+        height: 40vh;
+        width: 50vw;
+        top: 7.5vh;
+        left: 7.5vw;
+        bottom: 7.5vh;
+        border-radius: 15px;
+        border: 4px solid black;
+      }
+
+      h3 {
+        text-align: center;
+      }
+
+
+</style>
+  <head>
+    <title>Temperature App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+ 	<script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+  </head>
+    
+  <body>
+    <h1>Lab 4</h1>
+	
+    <script>
+	var connected_flag=0	
+	var mqtt;
+    var reconnectTimeout = 2000;
+	</script>
+ 
+    <div>
+        <div id="status">Connection Status: Not Connected</div>
+        <br>
+             <form name="connform" action="" onsubmit="return MQTTconnect()" id="connform">
+                    Server:  <input type="text" name="server" id ="server"><br><br>
+                    Port:    <input type="text" name="port" id="port"><br><br>
+                                <input type="submit" value="Start Connection", id="port_submit">
+            </form>
+                <button onclick="disconnect()">End Connection</button>
+        <hr>
+            <form name="subs" action="" onsubmit="return sub_topics()">
+                    Subscribe Topic:   <input type="text" name="Stopic"><br><br>
+                <input type="submit" value="Subscribe">
+            </form> 
+                    
+        <hr>
+            <form name="smessage" action="" onsubmit="return send_message()">
+                Message: <input type="text" name="message"><br><br>
+                Publish Topic:   <input type="text" name="Ptopic"><br><br>
+                <input type="submit" value="Submit">
+            </form>
+        <button onclick="send_location()">Send location</button>
+        <hr>
+        Messages:<p id="messages"></p>
+    </div>
+
+    <div id="map" ></div>
+  </body>
+</html>
+
+<!-- leaflet js  -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    // Map initialization 
+    var map = L.map('map').setView([51.0447, -114.0719], 6);
+    
+    //osm layer
+    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    osm.addTo(map);
+
+
+    var marker, circle;
+
+</script>
+    <script type = "text/javascript">
+
+
+	function onConnectionLost(){
+	console.log("connection lost");
+	document.getElementById("status").innerHTML = "Connection Lost";
+	document.getElementById("messages").innerHTML ="Reconnecting";
+	connected_flag=0;
+        
+        MQTTconnect()
+	}
+	function onFailure(message) {
+		console.log("Failed");
+		document.getElementById("messages").innerHTML = "Connection Failed- Retrying";
+        setTimeout(MQTTconnect, reconnectTimeout);
+        }
+		function onMessageArrived(r_message){
+            //out_msg="Message received "+r_message.payloadString+"<br>";
+            const obj = JSON.parse(r_message.payloadString);
+                        //console.log(position)
+        
+            var lat = obj.latitude
+            var long = obj.longitude
+            var accuracy = obj.precision
+            var temp = obj.temperature
+
+            if(marker) {
+                map.removeLayer(marker)
+            }
+
+            if(circle) {
+                map.removeLayer(circle)
+            }
+            
+            var greenIcon = new L.Icon({
+                                  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                                  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                  iconSize: [25, 41],
+                                  iconAnchor: [12, 41],
+                                  popupAnchor: [1, -34],
+                                  shadowSize: [41, 41]
+                                });
+            
+            var blueIcon = new L.Icon({
+                                  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+                                  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                  iconSize: [25, 41],
+                                  iconAnchor: [12, 41],
+                                  popupAnchor: [1, -34],
+                                  shadowSize: [41, 41]
+                                });
+            
+            var redIcon = new L.Icon({
+                                  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                                  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                  iconSize: [25, 41],
+                                  iconAnchor: [12, 41],
+                                  popupAnchor: [1, -34],
+                                  shadowSize: [41, 41]
+                                });
+            
+            var blackIcon = new L.Icon({
+                                  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+                                  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                  iconSize: [25, 41],
+                                  iconAnchor: [12, 41],
+                                  popupAnchor: [1, -34],
+                                  shadowSize: [41, 41]
+                                });
+            
+            if(temp < 10 && temp >= -40){
+                //then blue
+                marker = L.marker([lat, long], {icon: blueIcon})
+                circle = L.circle([lat, long], {radius: accuracy})
+                marker.bindPopup("Temperature: "+temp).openPopup();
+            }
+            else if(temp >= 10 && temp < 30){
+                //then green
+                marker = L.marker([lat, long], {icon: greenIcon})
+                circle = L.circle([lat, long], {radius: accuracy, color:'green'})
+                marker.bindPopup("Temperature: "+temp).openPopup();
+            }
+            else if(temp >=30 && temp <= 60){
+                //then red
+                marker = L.marker([lat, long], {icon: redIcon})
+                circle = L.circle([lat, long], {radius: accuracy, color:'red'})
+                marker.bindPopup("Temperature: "+temp).openPopup();
+            }
+            else{
+                //then out of range
+                marker = L.marker([lat, long], {icon: blackIcon})
+                circle = L.circle([lat, long], {radius: accuracy, color:'black'})
+                marker.bindPopup("Temperature: "+temp).openPopup();
+            }
+            
+
+            var featureGroup = L.featureGroup([marker, circle]).addTo(map)
+
+            map.fitBounds(featureGroup.getBounds())
+            
+            out_msg="Message received "+obj+"<br>";
+            out_msg=out_msg+"Message received Topic "+r_message.destinationName;
+            //console.log("Message received ",r_message.payloadString);
+            console.log(out_msg);
+            document.getElementById("messages").innerHTML =out_msg;
+		}
+	function onConnected(recon,url){
+	console.log(" in onConnected " +reconn);
+	}
+	function onConnect() {
+	  // Once a connection has been made, make a subscription and send a message.
+	document.getElementById("messages").innerHTML ="Connected to "+host +"on port "+port;
+	connected_flag=1
+	document.getElementById("status").innerHTML = "Connected";
+	console.log("on Connect "+connected_flag);
+	  }
+        
+    function disconnect()
+	  {
+          console.log("trying to disconnect"); 
+		if (connected_flag==1)
+            console.log("disconnecting"); 
+			mqtt.disconnect();
+            document.getElementById("server").disabled = false;
+            document.getElementById("port").disabled = false;
+            document.getElementById("port_submit").disabled = false;
+          
+          
+	  }
+    function MQTTconnect() {
+        document.getElementById("messages").innerHTML ="";
+        var s = document.forms["connform"]["server"].value;
+        var p = document.forms["connform"]["port"].value;
+        if (p!=""){
+            console.log("ports");
+            port=parseInt(p);
+            console.log("port" +port);
+        }
+        if (s!=""){
+            host=s;
+            console.log("host");
+        }
+        
+        console.log("connecting to "+ host +" "+ port);
+        var x=Math.floor(Math.random() * 10000); 
+        var cname="orderform-"+x;
+        mqtt = new Paho.MQTT.Client(host,port,cname);
+        //document.write("connecting to "+ host);
+        var options = {
+            timeout: 3,
+            onSuccess: onConnect,
+            onFailure: onFailure,
+
+         };
+
+        mqtt.onConnectionLost = onConnectionLost;
+        mqtt.onMessageArrived = onMessageArrived;
+
+        mqtt.connect(options);
+        
+        document.getElementById("server").disabled = true;
+        document.getElementById("port").disabled = true;
+        document.getElementById("port_submit").disabled = true;
+        
+        return false;
+
+
+	}
+	function sub_topics(){
+		document.getElementById("messages").innerHTML ="";
+		if (connected_flag==0){
+		out_msg="<b>Not Connected so can't subscribe</b>"
+		console.log(out_msg);
+		document.getElementById("messages").innerHTML = out_msg;
+		return false;
+		}
+	var stopic= document.forms["subs"]["Stopic"].value;
+	console.log("Subscribing to topic ="+stopic);
+	mqtt.subscribe(stopic);
+	return false;
+	}
+    
+    var marker, circle;
+    function generateTemp() {
+        var pos = 60,
+            neg = 40,
+            includeZero = false,
+            result;
+
+        do result = Math.ceil(Math.random() * (pos + neg)) - neg;
+        while (includeZero === false && result === 0);
+        
+        console.log(result)
+        
+        return result;
+    }
+    function getPosition(position){
+        console.log(position)
+        var lat = position.coords.latitude
+        var long = position.coords.longitude
+        var accuracy = position.coords.accuracy
+        
+        var temp = generateTemp();
+        
+        var msg = position
+        
+		console.log(msg);
+
+		var topic = "ENGO551/Jan_Erik_Naess/my_temperature";
+        
+        const geo_data = {latitude: lat, longitude: long, precision: accuracy, temperature: temp};
+        
+		message = new Paho.MQTT.Message(JSON.stringify(geo_data));
+
+		message.destinationName = topic;
+        
+		mqtt.send(message);
+		return false;
+        
+        console.log("Your coordinate is: Lat: "+ lat +" Long: "+ long+ " Accuracy: "+ accuracy)
+    }    
+        
+	function send_message(){        
+		document.getElementById("messages").innerHTML ="";
+		if (connected_flag==0){
+            out_msg="<b>Not Connected so can't send</b>"
+            console.log(out_msg);
+            document.getElementById("messages").innerHTML = out_msg;
+            return false;
+		}
+		var msg = document.forms["smessage"]["message"].value;
+        
+		console.log(msg);
+
+		var topic = document.forms["smessage"]["Ptopic"].value;
+        
+		message = new Paho.MQTT.Message(msg);
+		if (topic=="")
+			message.destinationName = "test-topic"
+		else
+			message.destinationName = topic;
+		mqtt.send(message);
+		return false;
+	}
+        
+    function send_location(){
+        if(!navigator.geolocation) {
+        console.log("Your browser doesn't support geolocation feature!")
+        } else {
+            navigator.geolocation.getCurrentPosition(getPosition)
+        }
+    }
+
+	
+    </script>

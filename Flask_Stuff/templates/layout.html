@@ -3,14 +3,18 @@
     
   <head>
     {% block head %}
-    <title>{% block title %}{% endblock %} - My Webpage</title>
+    <title>{% block title %}{% endblock %} </title>
     {% endblock %}
   </head>
   <body>
     <div id="content">{% block content %}{% endblock %}</div>
     <div id="footer">
       {% block footer %}
-      &copy; Copyright 2022 by <a href="http://domain.invalid/">Jan Erik Naess</a>.
+      <a href="/field_management">field_management</a>
+    
+    <a href="/asset_management">asset_management</a>.
+
+    <a href='/live_feed'>live_feed</a>
       {% endblock %}
     </div>
   </body>
