@@ -1,6 +1,10 @@
+numpy
+pandas
+shapely
+geopandas
+psycopg2
+sqlalchemy
 cs50
-flask_mail
 flask
 flask_session
-cs50
-flask_mail
+requests
