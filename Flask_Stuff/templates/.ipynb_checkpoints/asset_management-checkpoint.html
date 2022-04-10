@@ -3,8 +3,10 @@
 {% block head %}
 {% block title %}Field Management{% endblock %}
       
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
-      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" /> 
 {% endblock %}
 
 {% block content %}
@@ -21,24 +23,60 @@
 </style>
 <div id="map" ></div>
 <br><br><br><br>
-    <form action="/new_crop" method="post" id="new_crop_form">
-        <input type="submit" value="Add New Crop">
+    <form>
+        <input type='text' name='crop_type' value = "wheat" id='crop_type'>
+        <button type="button" onclick="send_field_info()">Submit</button>
     </form>
+       
 <br>
 
 <!-- leaflet js  -->
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+    <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>  
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+
+
 <script>
-    // Map initialization 
-    var map = L.map('map').setView([51.0447, -114.0719], 13);
-    
-    //osm layer
-    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
-    osm.addTo(map);
+    // Map initialization ,
+            var map = L.map('map').setView([51.023917, -114.098511], 13);
+        mapLink = 
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+            }).addTo(map);
+        
+        map.pm.addControls({  
+          position: 'topleft',  
+          drawCircle: false,  
+        }); 
 
+        var real_coords;
+        function setPupup(layer) {
+          var feature = layer.toGeoJSON();
+          real_coords = feature.geometry.coordinates;
+        }
 
-    var marker, circle;
+        map.on('pm:create', function(e) {
+          var layer = e.layer;
+          setPupup(layer);
+          layer.on('pm:update', function(e) {
+            setPupup(e.layer);
+          });
+        });
+    </script>
+
+<script>
+    function send_field_info(){
+        let crop_type=document.getElementById('crop_type').value
+        console.log(crop_type)
+        const request = new XMLHttpRequest()
+        //request.open('POST',`/process_field/${JSON.stringify(crop_type)}`);
+        request.open('POST',`/process_field/${JSON.stringify(crop_type)}/${JSON.stringify(real_coords)}`);
+        request.send();
+    }
     </script>
 {% endblock %}

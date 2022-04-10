@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Leaflet Map</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />  
+</head>
+<body>
+    <div id="map" style="width: 600px; height: 400px"></div>
+</body>
+     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+    <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>  
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+
+    <script>
+        
+        var map = L.map('map').setView([40.058841, -75.042164], 10);
+        mapLink = 
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+            }).addTo(map);
+
+        L.marker([51.0447, -114.0719], { pmIgnore: true }).addTo(map); 
+        
+        map.pm.addControls({  
+          position: 'topleft',  
+          drawCircle: false,  
+        }); 
+
+        
+        map.on('pm:create', function(e) {            
+            
+              console.log(e)
+              var layer = e.layer;
+              var id = 123; 
+              layer.properties = {
+                    id,
+                    name: `Zone ${id}`
+              }
+              e.layer.on('pm:edit', function(x) {
+                console.log('edit', x)
+              });
+            });
+        
+        function makePopupContent(feature){
+          return `
+            ${feature.geometry.coordinates}   
+          `;
+        }
+
+        var coords;
+        
+        function setPupup(layer) {
+          var feature = layer.toGeoJSON();
+          coords = makePopupContent(feature);
+          layer.bindPopup(coords);
+            console.log(coords);
+            console.log("hiiii");
+            
+            var latlng = new L.latLng(-75.149231,39.949753);
+            var point = L.Projection.Mercator.project(latlng);
+            console.log(point);
+        }
+
+        map.on('pm:create', function(e) {
+          var layer = e.layer;
+          setPupup(layer);
+          layer.on('pm:update', function(e) {
+            setPupup(e.layer);
+          });
+        });
+
+        
+        L.geoJSON(myGeoJSON).addTo(map)
+        
+        var latlngs = [[ 39.35129,-81.320801],
+                       [42.098222,-81.320801],
+                       [42.098222,-75.52002],
+                       [39.35129,-75.52002]];
+        
+        var polygon = L.polygon(latlngs, {color: 'red'});
+        polygon.addTo(map);
+    </script>
+</html>
