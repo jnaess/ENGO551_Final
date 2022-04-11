@@ -62,14 +62,14 @@ line-height:140%;
         <div id="status">Connection Status: Not Connected</div>
         <br>
              <form name="connform" action="" onsubmit="return MQTTconnect()" id="connform">
-                    Server:  <input type="text" name="server" id ="server"><br><br>
-                    Port:    <input type="text" name="port" id="port"><br><br>
+                    Server:  <input type="text" name="server" id ="server", value="test.mosquitto.org"><br><br>
+                    Port:    <input type="text" name="port" id="port", value=8080><br><br>
                                 <input type="submit" value="Start Connection", id="port_submit">
             </form>
                 <button onclick="disconnect()">End Connection</button>
         <hr>
             <form name="subs" action="" onsubmit="return sub_topics()">
-                    Subscribe Topic:   <input type="text" name="Stopic"><br><br>
+                    Subscribe Topic:   <input type="text" name="Stopic", value="ENGO551_Final/OnlyFarms101"><br><br>
                 <input type="submit" value="Subscribe">
             </form> 
                     
@@ -312,7 +312,7 @@ line-height:140%;
         
 		console.log(msg);
 
-		var topic = "ENGO551/Jan_Erik_Naess/my_temperature";
+		var topic = "ENGO551_Final/OnlyFarms101";
         
         const geo_data = {latitude: lat, longitude: long, precision: accuracy, temperature: temp};
         

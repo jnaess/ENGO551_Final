@@ -47,9 +47,8 @@ def index():
 @app.route('/asset_management', methods=["GET","POST"])
 def asset_management():
 
-    geoJSON = db.load_fields()
-
-    return render_template("asset_management.html", json_string = geoJSON)
+    return render_template("asset_management.html", 
+                           json_string = db.load_fields())
 
 @app.route('/process_field/<string:crop_type>/<string:poly>', methods=['POST'])
 def process_field(crop_type, poly):
@@ -65,7 +64,8 @@ def field_management():
 
 @app.route('/live_feed')
 def live_feed():
-    return render_template("live_feed.html")
+    return render_template("live_feed.html", 
+                           json_string = db.load_fields())
 
 @app.route('/tester')
 def tester():

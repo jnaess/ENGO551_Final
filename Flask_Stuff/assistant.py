@@ -14,7 +14,8 @@ class Assistant():
         return
         
     def load_fields(self):
-        """loads all fields
+        """
+        loads all fields
         """
         df = self.fields_all()
 
