@@ -182,7 +182,7 @@ request.send()
             if(circle) {
                 map.removeLayer(circle)
             }
-            
+            /*
             var greenIcon = new L.Icon({
                                   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
                                   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -242,9 +242,9 @@ request.send()
                 marker = L.marker([lat, long], {icon: blackIcon})
                 circle = L.circle([lat, long], {radius: accuracy, color:'black'})
                 marker.bindPopup("Temperature: "+temp).openPopup();
-            }
+            }*/
             
-            //marker = L.marker([lat, long])
+            marker = L.marker([lat, long])
             //update marker location
             var featureGroup = L.featureGroup([marker]).addTo(map)
 
