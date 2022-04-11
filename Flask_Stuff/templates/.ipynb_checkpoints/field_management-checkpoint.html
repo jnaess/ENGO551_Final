@@ -1,45 +1,97 @@
 {% extends "layout.html" %}
 
+{% block head %}
+{% block title %}{% endblock %}
+      
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" /> 
+{% endblock %}
+
 {% block heading %}
-<h1>Field Management</h1>
-<a href="/field_management">Field Management</a>
-<a href="/asset_management">Asset Management</a>
-<a href='/live_feed'>Live Feed</a>
+<h2>Field Management</h2>
 {% endblock %}
 
 {% block content %}
-    <table>
-        <thead>
-            <tr>
-                <th>Asset</th>
-                <th>ID</th>
-                <th>Class</th>
-                <th>Edit</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for asset in assets %}
-                <tr>
-                    <td>{{asset.name}}</td>
-                    <td>{{assets.id}}</td>
-                    <td>{{asset.employee}}</td>
-                    <td>Modify</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-<br>
-<p>Add New Asset</p>
-    <form action="/new_asset" method="post" id="new_asset_form">
-        Asset: <input type="text" name="name" id ="name"><br><br>
-        Class: <select name="class">
-                    <option disable selected>Class</option>
-                    <option>Employee</option>
-                    <option>Vehicle</option>
-                    <option>Equipment</option>
-                </select><br><br>
-        <input type="submit" value="Submit Review" />
+<style>
+    #map {
+        height: 40vh;
+        width: 50vw;
+        top: 7.5vh;
+        left: 7.5vw;
+        bottom: 7.5vh;
+        border-radius: 15px;
+        border: 4px solid black;
+      }
+</style>
+<div id="map" ></div>
+<br><br><br><br>
+    <form>
+        <input type='text' name='crop_type' value = "wheat" id='crop_type'>
+        <button type="button" onclick="send_field_info()">Submit</button>
     </form>
+       
 <br>
 
+<!-- leaflet js  -->
+     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+    <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>  
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+
+
+<script>
+    // Map initialization ,
+        var map = L.map('map').setView([51.023917, -114.098511], 13);
+        mapLink = 
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+            }).addTo(map);
+        
+        map.pm.addControls({  
+          position: 'topleft',  
+          drawCircle: false,  
+        }); 
+
+
+    </script>
+
+
+<script>
+    //to load the shapes onto the map
+    const geocodeArr = JSON.parse('{{ json_string | tojson }}');
+
+    L.geoJSON( geocodeArr ).addTo(map)
+</script>
+<script>
+    //send polygon scripts
+    
+    var real_coords;
+    function setPupup(layer) {
+          var feature = layer.toGeoJSON();
+          real_coords = feature.geometry.coordinates;
+        }
+
+    map.on('pm:create', function(e) {
+          var layer = e.layer;
+          setPupup(layer);
+          layer.on('pm:update', function(e) {
+            setPupup(e.layer);
+          });
+        });
+    
+    function send_field_info(){
+        let crop_type=document.getElementById('crop_type').value
+        console.log(crop_type)
+        const request = new XMLHttpRequest()
+        //request.open('POST',`/process_field/${JSON.stringify(crop_type)}`);
+        request.open('POST',`/process_field/${JSON.stringify(crop_type)}/${JSON.stringify(real_coords)}`);
+        request.send();
+    }
+    </script>
 {% endblock %}

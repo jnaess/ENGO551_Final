@@ -9,13 +9,16 @@
 {% endblock %}
 
 {% block heading %}
-<h1>Live Feed</h1>
-<a href="/field_management">Field Management</a>
-<a href="/asset_management">Asset Management</a>
-<a href='/live_feed'>Live Feed</a>
+<h2>Live Feed</h2>
 {% endblock %}
 
 {% block content %}
+<script>
+	var connected_flag=0	
+	var mqtt;
+    var reconnectTimeout = 2000;
+	</script>
+
 <style>
     #map {
         height: 75vh;
@@ -34,7 +37,7 @@
 
 <div id="status">Connection Status: Not Connected</div>
 Messages:<p id="messages"></p>
-<button onclick="MQTTconnect()">Reconect</button>
+<button onclick="MQTTconnect()">Reconnect</button>
 <button onclick="disconnect()">End Connection</button>
 <button onclick="sub_topics()">Subscribe</button>
 

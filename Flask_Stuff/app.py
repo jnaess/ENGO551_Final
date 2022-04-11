@@ -42,12 +42,12 @@ db = DatabaseManager()
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return redirect("/live_feed")
 
-@app.route('/asset_management', methods=["GET","POST"])
-def asset_management():
+@app.route('/field_management', methods=["GET","POST"])
+def field_management():
 
-    return render_template("asset_management.html", 
+    return render_template("field_management.html", 
                            json_string = db.load_fields())
 
 @app.route('/process_field/<string:crop_type>/<string:poly>', methods=['POST'])
@@ -55,18 +55,40 @@ def process_field(crop_type, poly):
     #adds a new field
     db.new_field(crop_type=crop_type, geometry=poly) 
     
-    return('/asset_management')
+    return redirect('/field_management')
     
     
-@app.route('/field_management')
-def field_management():
-    return render_template("field_management.html")
+@app.route('/asset_management', methods=["GET","POST"])
+def asset_management():       
+    #the main asset management page
+    
+    #load all current assets
+    assets = db.select_all("assets")
+    
+    print(assets)
+    print(assets.iterrows())
+    return render_template("asset_management.html", assets = assets)
+
+@app.route('/new_asset', methods=["GET", "POST"])
+def new_asset():
+    if request.method == "POST":
+        #then it was sent in correctly
+        
+        #before asigning session variables
+        asset_class = request.form.get("class")
+        asset_name = request.form.get("name")
+        
+        #add new asset to database
+        db.new_asset(asset_class, asset_name)
+        
+    
+    return redirect('/asset_management')
 
 @app.route('/live_feed')
 def live_feed():
     return render_template("live_feed.html", 
                            json_string = db.load_fields())
 
-@app.route('/tester')
-def tester():
-    return render_template("tester.html")
+@app.route('/asset_tracker')
+def asset_tracker():
+    return render_template("asset_tracker.html")

@@ -60,3 +60,13 @@ class QueryManager():
     
         self.engine.execute(f"INSERT INTO {table}\
                        (farm_id, crop_type, geometry) VALUES ('{self.farm_id}', '{crop_type}', '{poly_formatted}')")
+        
+    def new_asset(self, asset_class, asset_name, table = "assets"):
+        """
+        Desc:
+            Inserts a new field with a given crop type
+        Input:
+        Output:
+        """    
+        self.engine.execute(f"INSERT INTO {table}\
+                       (farm_id, name, class) VALUES ('{self.farm_id}', '{asset_name}', '{asset_class}')")

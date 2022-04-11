@@ -45,7 +45,14 @@
     
     <body>
         <header>
-        <h1>{% block heading %}{% endblock %}</h1>
+            <h1>
+                <h1>OnlyFarms</h1>
+                {% block heading %}{% endblock %}
+                <a href='/live_feed'>Live Feed</a>
+                <a href="/field_management">Field Management</a>
+                <a href="/asset_management">Asset Management</a>
+                <a href='/asset_tracker'>Asset Tracker</a>
+            </h1>
         </header>
         
         <div id="content">{% block content %}{% endblock %}</div>

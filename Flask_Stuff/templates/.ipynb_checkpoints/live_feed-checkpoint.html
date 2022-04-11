@@ -9,13 +9,16 @@
 {% endblock %}
 
 {% block heading %}
-<h1>Live Feed</h1>
-<a href="/field_management">Field Management</a>
-<a href="/asset_management">Asset Management</a>
-<a href='/live_feed'>Live Feed</a>
+<h2>Live Feed</h2>
 {% endblock %}
 
 {% block content %}
+<script>
+	var connected_flag=0	
+	var mqtt;
+    var reconnectTimeout = 2000;
+	</script>
+
 <style>
     #map {
         height: 75vh;
@@ -34,7 +37,7 @@
 
 <div id="status">Connection Status: Not Connected</div>
 Messages:<p id="messages"></p>
-<button onclick="MQTTconnect()">Reconect</button>
+<button onclick="MQTTconnect()">Reconnect</button>
 <button onclick="disconnect()">End Connection</button>
 <button onclick="sub_topics()">Subscribe</button>
 
@@ -103,38 +106,6 @@ function refreshWeather(){
     request.send()
 }
 setInterval(refreshWeather, 10000); //once every 10 seconds
-    
-
-  /*  
-var request = new XMLHttpRequest()
-    
-const weatherDisplay = document.getElementById("weather");
-const temperatureDisplay = document.getElementById("temperature");
-  
-    
-request.open('GET', 'https://api.openweathermap.org/data/2.5/weather?lat=51.0447&lon=-114.0719&appid=9a73084d2a98c0a030fb47a70a83c69c', true)
-    
-request.onload = function () {
-      // Begin accessing JSON data here
-      var data = JSON.parse(this.response)
-
-      if (request.status >= 200 && request.status < 400) {
-          
-          //var weather = data.weather[0].main;
-          //var temperature = String(data.main.temp - 273);
-          console.log(data)
-            //console.log(weather)
-            //console.log(temperature)
-
-            //weatherDisplay.textContent = weather;
-            //temperatureDisplay.textContent = temperature;
-      } else {
-        console.log('error')
-      }
-        
-    }
-request.send()
-*/
     
 </script>
 <script>
