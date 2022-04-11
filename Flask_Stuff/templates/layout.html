@@ -9,9 +9,36 @@
         {% endblock %}
         <style>
             header{
-                background-image: url("https://lanigancpa.com/wp-content/uploads/agriculture-header.jpg");
+                background-image: url("https://www.ckl.africa/wp-content/uploads/2020/04/wheat-farming-banner-1.jpg");
+                opacity: 0.75;
                 background-size: cover;
-                padding: 80px;
+                padding: 40px;
+                text-align: center;
+                font-variant: small-caps;
+            }
+            a{
+                color: black;
+                font-weight: bold;
+                padding-left: 5px;
+                padding-right: 5px;
+                padding-bottom: 5px;
+                padding-top: 2.5px;
+                background-color: white;
+                opacity: 0.75;
+                border-radius: 10px;
+                text-decoration: none;
+            }
+            table{
+                border-collapse: collapse;
+                width: 100%;
+                margin-bottom: 50px;
+            }
+            td, th{
+                border: 1px solid #d1b69b;
+                padding: 8px;
+            }
+            tr:nth-child(odd){
+                background-color: #d1b69b;
             }
         </style>
     </head>
@@ -24,9 +51,6 @@
         <div id="content">{% block content %}{% endblock %}</div>
         <div id="footer">
         {% block footer %}
-        <a href="/field_management">Field Management</a>
-        <a href="/asset_management">Asset Management</a>
-        <a href='/live_feed'>Live Feed</a>
         {% endblock %}
         </div>
     </body>

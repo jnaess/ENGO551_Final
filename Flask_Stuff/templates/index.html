@@ -1,10 +1,15 @@
 {% extends "layout.html" %}
 
 {% block head %}
-    {% block title %}Hello World{% endblock %}
+    {% block title %}{% endblock %}
 {% endblock %}
 
-{% block heading %}OnlyFarms{% endblock %}
+{% block heading %}
+<h1>OnlyFarms</h1>
+<a href="/field_management">Field Management</a>
+<a href="/asset_management">Asset Management</a>
+<a href='/live_feed'>Live Feed</a>
+{% endblock %}
 
 {% block content %}
 

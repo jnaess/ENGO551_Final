@@ -1,12 +1,19 @@
 {% extends "layout.html" %}
 
 {% block head %}
-{% block title %}Field Management{% endblock %}
+{% block title %}{% endblock %}
       
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
    crossorigin=""/>
     <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" /> 
+{% endblock %}
+
+{% block heading %}
+<h1>Asset Management</h1>
+<a href="/field_management">Field Management</a>
+<a href="/asset_management">Asset Management</a>
+<a href='/live_feed'>Live Feed</a>
 {% endblock %}
 
 {% block content %}
