@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 import json
 
+
 class QueryManager():
     """
     """
@@ -13,6 +14,7 @@ class QueryManager():
         Input:
         Output:
         """
+        
     
     def select_all(self, table = "simulations"):
         """
@@ -23,7 +25,7 @@ class QueryManager():
         """
         return pd.read_sql_query(f'''SELECT * FROM {table} ''', self.engine)
     
-    def simulations_all(self, con, table = "fields"):
+    def fields_all(self, table = "fields"):
         """
         Desc:
             querry to reteive all rows from the simulations table

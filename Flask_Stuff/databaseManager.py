@@ -2,9 +2,10 @@ import psycopg2
 from sqlalchemy import create_engine
 import pandas as pd
 
+from assistant import Assistant
 from queryManager import QueryManager
 
-class DatabaseManager(QueryManager):
+class DatabaseManager(QueryManager, Assistant):
     """
     """
     
@@ -17,6 +18,7 @@ class DatabaseManager(QueryManager):
         self.farm_id = farm_id
         
         QueryManager.__init__(self)
+        Assistant.__init__(self)
         
         self.initialize_key_values()
         

@@ -56,7 +56,12 @@
 
 
     </script>
+<script>
+    //to load the shapes onto the map
+    const geocodeArr = JSON.parse('{{ json_string | tojson }}');
 
+    L.geoJSON( geocodeArr ).addTo(map)
+</script>
 <script>
     //send polygon scripts
     

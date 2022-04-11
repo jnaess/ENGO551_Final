@@ -38,7 +38,6 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 db = DatabaseManager()
-#db = SQL("postgres://tdordoxeldwmqu:8f5dd3c7322b6a83fa9279eb76cdc139979adcc7b3c03ace597bac1661d1e696@ec2-34-239-196-254.compute-1.amazonaws.com:5432/dal40v64r9dbnv")
 
 
 @app.route('/')
@@ -47,7 +46,10 @@ def index():
 
 @app.route('/asset_management', methods=["GET","POST"])
 def asset_management():
-    return render_template("asset_management.html")
+
+    geoJSON = db.load_fields()
+
+    return render_template("asset_management.html", json_string = geoJSON)
 
 @app.route('/process_field/<string:crop_type>/<string:poly>', methods=['POST'])
 def process_field(crop_type, poly):
