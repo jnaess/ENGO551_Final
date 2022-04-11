@@ -1,22 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+    <head>
+        {% block head %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="1.css">
+        <title>OnlyFarms</title>
+        {% endblock %}
+        <style>
+            header{
+                background-image: url("https://www.ckl.africa/wp-content/uploads/2020/04/wheat-farming-banner-1.jpg");
+                opacity: 0.75;
+                background-size: cover;
+                padding: 40px;
+                text-align: center;
+                font-variant: small-caps;
+            }
+            a{
+                color: black;
+                font-weight: bold;
+                padding-left: 5px;
+                padding-right: 5px;
+                padding-bottom: 5px;
+                padding-top: 2.5px;
+                background-color: white;
+                opacity: 0.75;
+                border-radius: 10px;
+                text-decoration: none;
+            }
+            table{
+                border-collapse: collapse;
+                width: 100%;
+                margin-bottom: 50px;
+            }
+            td, th{
+                border: 1px solid #d1b69b;
+                padding: 8px;
+            }
+            tr:nth-child(odd){
+                background-color: #d1b69b;
+            }
+        </style>
+    </head>
     
-  <head>
-    {% block head %}
-    <title>{% block title %}{% endblock %} </title>
-    {% endblock %}
-  </head>
-  <body>
-    <div id="content">{% block content %}{% endblock %}</div>
-    <div id="footer">
-      {% block footer %}
-      <a href="/field_management">field_management</a>
-    
-    <a href="/asset_management">asset_management</a>.
-
-    <a href='/live_feed'>live_feed</a>
-      {% endblock %}
-    </div>
-  </body>
+    <body>
+        <header>
+        <h1>{% block heading %}{% endblock %}</h1>
+        </header>
+        
+        <div id="content">{% block content %}{% endblock %}</div>
+        <div id="footer">
+        {% block footer %}
+        {% endblock %}
+        </div>
+    </body>
 </html>
 
