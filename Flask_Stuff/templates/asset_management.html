@@ -5,13 +5,14 @@
 {% endblock %}
 
 {% block content %}
+<br>
+<br>
     <table>
         <thead>
             <tr>
-                <th>Asset</th>
+                <th>Asset Name</th>
                 <th>ID</th>
                 <th>Class</th>
-                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
@@ -20,15 +21,15 @@
                     <td>{{asset["name"]}}</td>
                     <td>{{asset.asset_id}}</td>
                     <td>{{asset.class}}</td>
-                    <td>Modify</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 <br>
-<p>Add New Asset</p>
+<hr>
+<p><strong>Add New Asset</strong></p>
     <form action="/new_asset" method="post" id="new_asset_form">
-        Asset: <input type="text" name="name" id ="name"><br><br>
+        Asset Name: <input type="text" name="name" id ="name"><br><br>
         Class: <select name="class">
                     <option disable selected>Class</option>
                     <option>Employee</option>
@@ -37,6 +38,7 @@
                 </select><br><br>
         <input type="submit" value="Submit Review" />
     </form>
+<hr>
 <br>
 
 {% endblock %}
