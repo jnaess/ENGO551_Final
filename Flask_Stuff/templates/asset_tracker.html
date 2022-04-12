@@ -19,18 +19,15 @@ line-height:140%;
     body {
     margin: 0;
     padding: 0;
-    background-color: #F4FDFF;
     font-family: Arial;
-  }
+    }
 
       #map {
         height: 40vh;
         width: 50vw;
         top: 7.5vh;
-        left: 7.5vw;
+        left: 9vw;
         bottom: 7.5vh;
-        border-radius: 15px;
-        border: 4px solid black;
       }
 
       h3 {
@@ -53,7 +50,7 @@ line-height:140%;
 {% endblock %}
 
 {% block heading %}
-<h2>Live Feed</h2>
+<h2>Asset Tracker</h2>
 {% endblock %}
 
 
@@ -69,7 +66,7 @@ line-height:140%;
  
     <div>
         <div id="status">Connection Status: Not Connected</div>
-            Messages:<p id="messages"></p>
+            <p id="messages"></p>
             <button onclick="MQTTconnect()">Reconnect</button>
             <button onclick="disconnect()">End Connection</button>      
         <hr>
