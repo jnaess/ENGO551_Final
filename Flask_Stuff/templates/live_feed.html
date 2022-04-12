@@ -74,7 +74,7 @@ Messages:<p id="messages"></p>
     osm.addTo(map);
 
 
-    var marker, m_a, m_b, m_c, circle;
+    var marker, m_caitlyn, m_je, m_evan, circle, iconer;
     </script>
 
 <script>
@@ -156,37 +156,42 @@ setInterval(refreshWeather, 10000); //once every 10 seconds
             var lat = obj.latitude
             var long = obj.longitude
             var accuracy = obj.precision
-            var temp = obj.temperature
+            var id = obj.id
+            var asset_name = obj.asset_name
+            var asset_class = obj.asset_class
+            
 
             //removes all previous markers --> we want to change this a bit
             if(marker) {
                 map.removeLayer(marker)
             }
         
-            if(m_a) {
-                    map.removeLayer(m_a)
+            if(m_caitlyn && asset_name == "caitlyn") {
+                    map.removeLayer(m_caitlyn)
                 }
-            if(m_b) {
-                    map.removeLayer(m_b)
+            if(m_je && asset_name == "je") {
+                    map.removeLayer(m_je)
                 }
-            if(m_c) {
-                    map.removeLayer(m_c)
+            if(m_evan && asset_name == "evan") {
+                    map.removeLayer(m_evan)
                 }
 
             if(circle) {
                 map.removeLayer(circle)
             }
-            /*
-            var greenIcon = new L.Icon({
-                                  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-                                  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                                  iconSize: [25, 41],
-                                  iconAnchor: [12, 41],
-                                  popupAnchor: [1, -34],
-                                  shadowSize: [41, 41]
-                                });
             
-            var blueIcon = new L.Icon({
+            if (asset_class == "Employee"){
+                iconer = new L.Icon({
+                                      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                                      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                      iconSize: [25, 41],
+                                      iconAnchor: [12, 41],
+                                      popupAnchor: [1, -34],
+                                      shadowSize: [41, 41]
+                                    });
+            }
+            else if (asset_class == "Vehicle"){
+                iconer = new L.Icon({
                                   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
                                   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                                   iconSize: [25, 41],
@@ -194,8 +199,9 @@ setInterval(refreshWeather, 10000); //once every 10 seconds
                                   popupAnchor: [1, -34],
                                   shadowSize: [41, 41]
                                 });
-            
-            var redIcon = new L.Icon({
+            }
+            else if (asset_class == "Equipment"){
+                iconer = new L.Icon({
                                   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
                                   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                                   iconSize: [25, 41],
@@ -203,8 +209,9 @@ setInterval(refreshWeather, 10000); //once every 10 seconds
                                   popupAnchor: [1, -34],
                                   shadowSize: [41, 41]
                                 });
-            
-            var blackIcon = new L.Icon({
+            }
+            else{
+                iconer = new L.Icon({
                                   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
                                   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                                   iconSize: [25, 41],
@@ -212,8 +219,8 @@ setInterval(refreshWeather, 10000); //once every 10 seconds
                                   popupAnchor: [1, -34],
                                   shadowSize: [41, 41]
                                 });
-            
-            if(temp < 10 && temp >= -40){
+            }
+           /* if(temp < 10 && temp >= -40){
                 //then blue
                 marker = L.marker([lat, long], {icon: blueIcon})
                 circle = L.circle([lat, long], {radius: accuracy})
@@ -237,15 +244,46 @@ setInterval(refreshWeather, 10000); //once every 10 seconds
                 circle = L.circle([lat, long], {radius: accuracy, color:'black'})
                 marker.bindPopup("Temperature: "+temp).openPopup();
             }*/
-            
-            marker = L.marker([lat, long])
-            //update marker location
-            var featureGroup = L.featureGroup([marker]).addTo(map)
+            if (asset_name == "caitlyn"){
+                m_caitlyn = L.marker([lat, long], {icon: iconer})
+                m_caitlyn.bindPopup("Asset Name: "+asset_name+
+                                    " Asset ID: "+id+
+                                   " Asset Class: "+asset_class).openPopup();
+                //update marker location
+                var featureGroup = L.featureGroup([m_caitlyn]).addTo(map)
 
-            map.fitBounds(featureGroup.getBounds())
-            
-            out_msg="Message received "+obj+"<br>";
-            out_msg=out_msg+"Message received Topic "+r_message.destinationName;
+                map.fitBounds(featureGroup.getBounds())
+            }
+            else if (asset_name == "je"){
+                m_je = L.marker([lat, long], {icon: iconer})
+                m_je.bindPopup("Asset Name: "+asset_name+
+                                    " Asset ID: "+id+
+                                   " Asset Class: "+asset_class).openPopup();
+                //update marker location
+                var featureGroup = L.featureGroup([m_je]).addTo(map)
+
+                map.fitBounds(featureGroup.getBounds())
+                }
+            else if (asset_name == "evan"){
+                m_evan = L.marker([lat, long], {icon: iconer})
+                m_evan.bindPopup("Asset Name: "+asset_name+
+                                    " Asset ID: "+id+
+                                   " Asset Class: "+asset_class).openPopup();
+                //update marker location
+                var featureGroup = L.featureGroup([m_evan]).addTo(map)
+                
+
+                map.fitBounds(featureGroup.getBounds())
+                }
+            else{
+                marker = L.marker([lat, long], {icon: iconer})
+                //update marker location
+                var featureGroup = L.featureGroup([marker]).addTo(map)
+
+                map.fitBounds(featureGroup.getBounds())
+            }
+        
+            out_msg="Location Recieved from "+asset_name;
             //console.log("Message received ",r_message.payloadString);
             console.log(out_msg);
             document.getElementById("messages").innerHTML =out_msg;
