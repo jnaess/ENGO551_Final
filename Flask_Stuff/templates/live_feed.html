@@ -20,6 +20,21 @@
 	</script>
 
 <style>
+    #messages
+{
+background-color:yellow;
+font-size:3;
+font-weight:bold;
+line-height:140%;
+}
+#status
+{
+background-color:red;
+font-size:4;
+font-weight:bold;
+color:white;
+line-height:140%;
+}
     #map {
         height: 75vh;
         width: 75vw;
@@ -61,7 +76,7 @@ Messages:<p id="messages"></p>
     osm.addTo(map);
 
 
-    var marker, circle;
+    var marker, m_a, m_b, m_c, circle;
     </script>
 
 <script>
@@ -149,6 +164,16 @@ setInterval(refreshWeather, 10000); //once every 10 seconds
             if(marker) {
                 map.removeLayer(marker)
             }
+        
+            if(m_a) {
+                    map.removeLayer(m_a)
+                }
+            if(m_b) {
+                    map.removeLayer(m_b)
+                }
+            if(m_c) {
+                    map.removeLayer(m_c)
+                }
 
             if(circle) {
                 map.removeLayer(circle)

@@ -53,7 +53,7 @@ line-height:140%;
 {% endblock %}
 
 {% block heading %}
-<h2>Live Feed</h2>
+<h2>Asset Tracker</h2>
 {% endblock %}
 
 
@@ -69,7 +69,6 @@ line-height:140%;
  
     <div>
         <div id="status">Connection Status: Not Connected</div>
-            Messages:<p id="messages"></p>
             <button onclick="MQTTconnect()">Reconnect</button>
             <button onclick="disconnect()">End Connection</button>      
         <hr>
@@ -77,11 +76,34 @@ line-height:140%;
                 Message: <input type="text" name="message"><br><br>
                 <input type="submit" value="Submit">
             </form>
+        <form name="login_asset" action="" onsubmit="return setup_info()">
+                Asset Name: <input type="text" name="asset_name" id="asset_name"><br><br>
+                Asset Class: <select name="asset_class" id="asset_class">
+                            <option disable selected>Class</option>
+                            <option>Employee</option>
+                            <option>Vehicle</option>
+                            <option>Equipment</option>
+                </select><br><br>
+                Asset ID: <input type="text" name="asset_id" id="asset_id"><br><br>
+                <input type="submit" value="Submit Asset">
+        </form>
         <button onclick="send_location()">Send location</button>
         <hr>
     </div>
 
-
+<script>
+    var asset_name, asset_class, asset_id;
+    fucntion setup_info(){
+        asset_name = document.forms["login_asset"]["asset_name"].value;
+        asset_class = document.forms["login_asset"]["asset_class"].value;
+        asset_id = document.forms["login_asset"]["asset_id"].value;
+        
+        console.log(asset_name);
+        console.log(asset_id);
+        console.log(asset_class);
+        return false;
+    }
+</script>
 <script type = "text/javascript">
     //begins trying to reconnect
     function onConnectionLost(){
@@ -189,7 +211,8 @@ line-height:140%;
 
 		var topic = "ENGO551_Final/OnlyFarms101";
         
-        const geo_data = {latitude: lat, longitude: long, precision: accuracy};
+        const geo_data = {latitude: lat, longitude: long, precision: accuracy,
+                         id:asset_id, asset_name:asset_name, asset_class:asset_class};
         
 		message = new Paho.MQTT.Message(JSON.stringify(geo_data));
 
@@ -234,6 +257,6 @@ line-height:140%;
     </script>
 <script>
     //connects to the broker and subscribes
-    MQTTconnect();
+    //MQTTconnect();
 </script>
 {% endblock %}
