@@ -1,4 +1,3 @@
-
 import re
 import os
 import io
@@ -43,6 +42,7 @@ db = DatabaseManager()
 @app.route('/')
 def index():
     print("hi")
+    
     return redirect("/live_feed")
 
 @app.route('/field_management', methods=["GET","POST"])
