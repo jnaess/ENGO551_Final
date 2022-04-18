@@ -85,4 +85,4 @@ class QueryManager():
         #self.engine.execute(f"INSERT INTO {table}\
                        #(asset_id, location) VALUES ({asset_id}, {geog_type})")
         self.engine.execute(f"INSERT INTO {table}\
-                       (asset_id, location) VALUES ({5}, '{geog_type}')")
+                       (asset_id, location) VALUES ({5}, {geog_type})")
