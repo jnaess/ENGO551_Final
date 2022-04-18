@@ -57,7 +57,7 @@ class QueryManager():
         poly_formatted = str(tuple(coords))
 
         #r1 = sg.Polygon(coords)
-    
+        print(poly_formatted)
         self.engine.execute(f"INSERT INTO {table}\
                        (farm_id, crop_type, geometry) VALUES ('{self.farm_id}', '{crop_type}', '{poly_formatted}')")
         
@@ -81,5 +81,8 @@ class QueryManager():
         geog_type ='({long} {lat})'
         #geog_type = "'POINT(%s %s)'" % (long, lat)
 
+
+        #self.engine.execute(f"INSERT INTO {table}\
+                       #(asset_id, location) VALUES ({asset_id}, {geog_type})")
         self.engine.execute(f"INSERT INTO {table}\
-                       (asset_id, location) VALUES ('{asset_id}', {geog_type})")
+                       (asset_id, location) VALUES ({5}, '{geog_type}')")
