@@ -78,11 +78,11 @@ class QueryManager():
         Input:
         Output:
         """    
-        geog_type ='({long} {lat})'
+        geog_type =f'({long}, {lat})'
         #geog_type = "'POINT(%s %s)'" % (long, lat)
 
 
         #self.engine.execute(f"INSERT INTO {table}\
                        #(asset_id, location) VALUES ({asset_id}, {geog_type})")
         self.engine.execute(f"INSERT INTO {table}\
-                       (asset_id, location) VALUES ({5}, {geog_type})")
+                       (asset_id, location, date) VALUES ({5}, '{geog_type}', now())")
