@@ -78,7 +78,7 @@ class QueryManager():
         Input:
         Output:
         """    
-        geog_type = f"'ST_SetSRID(ST_MakePoint({long}, {lat})'"
+        geog_type ='({long} {lat})'
         #geog_type = "'POINT(%s %s)'" % (long, lat)
 
         self.engine.execute(f"INSERT INTO {table}\
