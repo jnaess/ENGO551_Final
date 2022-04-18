@@ -70,3 +70,15 @@ class QueryManager():
         """    
         self.engine.execute(f"INSERT INTO {table}\
                        (farm_id, name, class) VALUES ('{self.farm_id}', '{asset_name}', '{asset_class}')")
+        
+    def new_asset_location(self, asset_id, lat, long, table = "asset_locations"):
+        """
+        Desc:
+            Inserts a new asset location for searching
+        Input:
+        Output:
+        """    
+        geog_type = "'POINT(%s %s)'" % (long, lat)
+
+        self.engine.execute(f"INSERT INTO {table}\
+                       (asset_id, location) VALUES ('{asset_id}', {geog_type})")

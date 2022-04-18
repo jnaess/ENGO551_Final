@@ -42,6 +42,7 @@ db = DatabaseManager()
 
 @app.route('/')
 def index():
+    print("hi")
     return redirect("/live_feed")
 
 @app.route('/field_management', methods=["GET","POST"])
@@ -74,7 +75,7 @@ def new_asset():
     if request.method == "POST":
         #then it was sent in correctly
         
-        ##before asigning session variables
+        #before asigning session variables
         asset_class = request.form.get("class")
         asset_name = request.form.get("name")
         
@@ -92,3 +93,18 @@ def live_feed():
 @app.route('/asset_tracker')
 def asset_tracker():
     return render_template("asset_tracker.html")
+
+
+@app.route('/process_asset/<string:asset_name>/<string:asset_class>/<string:asset_id>/<string:lat>/<string:long>', methods=['POST'])
+def process_asset(asset_name, asset_id, asset_class, lat, long):
+    
+    #adds a new asset location   
+    asset_name = request.form.get("asset_name_id")
+    asset_id = request.form.get("asset_id_id")
+    asset_class = request.form.get("asset_class_id")
+    lat = request.form.get("lat_id")
+    long = request.form.get("long_id")
+        
+    db.new_asset_location(asset_id, lat, long)
+        
+    return redirect('/asset_tracker')

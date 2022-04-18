@@ -84,7 +84,9 @@ line-height:140%;
                 Asset ID: <input type="text" name="asset_id" id="asset_id"><br><br>
                 <input type="submit" value="Submit Asset">
         </form>
-        <button onclick="send_location()">Send location</button>
+        <button onclick="return send_location()">Send location</button>
+        
+        <button type="submit" value="Submit Location" onclick="return send_asset_info();" >Record Location</button>
         <hr>
     </div>
 
@@ -92,6 +94,8 @@ line-height:140%;
     var asset_name;
     var asset_class;
     var asset_id;
+    var lat;
+    var long;
     function setup_info(){
         asset_name = document.forms["login_asset"]["asset_name"].value;
         asset_class = document.forms["login_asset"]["asset_class"].value;
@@ -100,6 +104,22 @@ line-height:140%;
         console.log(asset_name);
         console.log(asset_id);
         console.log(asset_class);
+        return false;
+    }
+
+    function send_asset_info(){
+        console.log(asset_name);
+        console.log(asset_id);
+        console.log(asset_class);
+        console.log(lat);
+        console.log(long);
+    
+        const request = new XMLHttpRequest()
+        //request.open('POST',`/process_field/${JSON.stringify(crop_type)}`);
+        request.open('POST',`/process_asset/${JSON.stringify(asset_name)}
+/${JSON.stringify(asset_class)}/${JSON.stringify(asset_id)}/${JSON.stringify(lat)}/${JSON.stringify(long)}`);
+        request.send();
+        
         return false;
     }
 </script>
@@ -199,8 +219,8 @@ line-height:140%;
     
     function getPosition(position){
         console.log(position)
-        var lat = position.coords.latitude
-        var long = position.coords.longitude
+        lat = position.coords.latitude
+        long = position.coords.longitude
         var accuracy = position.coords.accuracy
         
         var msg = position
@@ -210,7 +230,7 @@ line-height:140%;
 		var topic = "ENGO551_Final/OnlyFarms101";
         
         const geo_data = {latitude: lat, longitude: long, precision: accuracy,
-                         id:asset_id, asset_name:asset_name, asset_class:asset_class};
+                         id: asset_id, asset_name: asset_name, asset_class: asset_class};
         
 		message = new Paho.MQTT.Message(JSON.stringify(geo_data));
 
@@ -219,7 +239,7 @@ line-height:140%;
 		mqtt.send(message);
 		return false;
         
-        console.log("Your coordinate is: Lat: "+ lat +" Long: "+ long+ " Accuracy: "+ accuracy)
+        //console.log("Your coordinate is: Lat: "+ lat +" Long: "+ long+ " Accuracy: "+ accuracy)
     } 
             
 	/*function send_message(){    
@@ -249,6 +269,7 @@ line-height:140%;
         } else {
             navigator.geolocation.getCurrentPosition(getPosition)
         }
+        return false;
     }
 
 	
