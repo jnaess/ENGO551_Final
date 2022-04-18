@@ -99,11 +99,11 @@ def asset_tracker():
 def process_asset(asset_name, asset_id, asset_class, lat, long):
     
     #adds a new asset location   
-    asset_name = request.form.get("asset_name_id")
-    asset_id = request.form.get("asset_id_id")
-    asset_class = request.form.get("asset_class_id")
-    lat = request.form.get("lat_id")
-    long = request.form.get("long_id")
+    #asset_name = request.form.get("asset_name")
+    #asset_id = request.form.get("asset_id")
+    #asset_class = request.form.get("asset_class")
+    #lat = request.form.get("lat")
+    #long = request.form.get("long")
         
     db.new_asset_location(asset_id, lat, long)
         
