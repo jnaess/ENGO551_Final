@@ -116,8 +116,8 @@ line-height:140%;
     
         const request = new XMLHttpRequest()
         //request.open('POST',`/process_field/${JSON.stringify(crop_type)}`);
-        request.open('POST',`/process_asset/${JSON.stringify(asset_name)}
-/${JSON.stringify(asset_class)}/${JSON.stringify(asset_id)}/${JSON.stringify(lat)}/${JSON.stringify(long)}`);
+        //request.open('POST',`/process_asset/${JSON.stringify(asset_name)}/${JSON.stringify(asset_class)}/${JSON.stringify(asset_id)}/${JSON.stringify(lat)}/${JSON.stringify(long)}`);
+        request.open('POST',`/process_asset/${JSON.stringify("evan")}/${JSON.stringify("evan")}/${JSON.stringify(5)}/${JSON.stringify(114)}/${JSON.stringify(70)}`);
         request.send();
         
         return false;
