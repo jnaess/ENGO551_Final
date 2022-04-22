@@ -1,0 +1,33 @@
+-- Databace Schema Changes
+    db_schema = 'postgis'
+    
+    __table_args__ = {'schema': db_schema }
+    
+    
+    
+-- Create new point geometry column for assests
+SELECT AddGeometryColumn('postgis', 'asset_locations', 'geompt', 3776, 'POINT', 2);
+
+-- Create geometry from lat, lon double precision 
+-- EPSG 4269 is NAD83 geodetic coords, EPSG 3776 is NAD83 / Alberta 3TM ref merid 114 W
+UPDATE "postgis"."asset_locations" SET geompt = ST_Transform(ST_SetSRID(ST_MakePoint(longitude, latitude), 4269), 3776);
+
+
+
+-- Create new polygon geometry coulmn for fields
+SELECT AddGeometryColumn('postgis', 'feilds', 'geompoly', 3776,
+'POLYGON', 2);
+
+-- Create geometries from the 4 vertices
+UPDATE "postgis"."fields" 
+SET geompoly = ST_Transform(ST_SetSRID(ST_MakePolygon(ST_GeomFromText('LINESTRING(' || points || ')')), 4269), 3776);
+
+
+
+-- Perform spatial query
+SELECT asset_locations.id
+FROM asset_locations, fields
+WHERE ST_Contains(fields.geompoly, asset_locations.geompt);
+
+
+
