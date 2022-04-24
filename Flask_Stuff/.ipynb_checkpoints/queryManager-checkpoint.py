@@ -78,13 +78,8 @@ class QueryManager():
         Input:
         Output:
         """    
-<<<<<<< HEAD
-       
-        
-        geog_type =f'({long}, {lat})'
-=======
+
         geog_type ='({long} {lat})'
->>>>>>> dd07804b73900645c4fcdf57540a85f82707b1c3
         #geog_type = "'POINT(%s %s)'" % (long, lat)
 
 
@@ -100,6 +95,6 @@ class QueryManager():
         Input:
         Output:
         """    
-        return self.engine.execute("SELECT a_locations.id, fields.field_id\
-                                FROM a_locations, fields\
-                                WHERE ST_Contains(fields.geompoly, a_locations.geompt);")
+        return self.engine.execute("SELECT postgis.a_locations.id, postgis.fields.field_id\
+                                FROM postgis.a_locations, postgis.fields\
+                                WHERE ST_Contains(postgis.fields.geompoly, postgis.a_locations.geompt);")
