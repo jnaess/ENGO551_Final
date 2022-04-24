@@ -25,7 +25,7 @@ class QueryManager():
         """
         return pd.read_sql_query(f'''SELECT * FROM {table} ''', self.engine)
     
-    def fields_all(self, table = "fields"):
+    def fields_all(self, table = '"postgis"."fields"'):
         """
         Desc:
             querry to reteive all rows from the simulations table
