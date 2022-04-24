@@ -16,7 +16,7 @@ class QueryManager():
         """
         
     
-    def select_all(self, table = "simulations"):
+    def select_all(self, table = '"postgis"."simulations"'):
         """
         Desc:
             selects all rows from a column
@@ -37,7 +37,7 @@ class QueryManager():
         return pd.read_sql_query(f'''SELECT * 
                         FROM {table} ''', self.engine)
     
-    def new_field(self, crop_type, geometry, table = "fields"):
+    def new_field(self, crop_type, geometry, table = '"postgis"."fields"'):
         """
         Desc:
             inserts a new field with a given crop type
@@ -61,7 +61,7 @@ class QueryManager():
         self.engine.execute(f"INSERT INTO {table}\
                        (farm_id, crop_type, geometry) VALUES ('{self.farm_id}', '{crop_type}', '{poly_formatted}')")
         
-    def new_asset(self, asset_class, asset_name, table = "assets"):
+    def new_asset(self, asset_class, asset_name, table = '"postgis.""assets"'):
         """
         Desc:
             Inserts a new field with a given crop type
@@ -71,13 +71,15 @@ class QueryManager():
         self.engine.execute(f"INSERT INTO {table}\
                        (farm_id, name, class) VALUES ('{self.farm_id}', '{asset_name}', '{asset_class}')")
         
-    def new_asset_location(self, asset_id, lat, long, table = "asset_locations"):
+    def new_asset_location(self, asset_id, lat, long, table = '"postgis"."asset_locations"'):
         """
         Desc:
             Inserts a new asset location for searching
         Input:
         Output:
         """    
+       
+        
         geog_type =f'({long}, {lat})'
         #geog_type = "'POINT(%s %s)'" % (long, lat)
 

@@ -28,6 +28,8 @@ from databaseManager import DatabaseManager
 
 app = Flask(__name__)
 
+
+
 #api URL
 book_api = "https://www.googleapis.com/books/v1/volumes"
 
@@ -38,10 +40,15 @@ Session(app)
 
 db = DatabaseManager()
 
+db_schema = 'postgis'
+__table_args__ = {'schema': db_schema }
+
 
 @app.route('/')
 def index():
     print("hi")
+    
+    
     
     return redirect("/live_feed")
 

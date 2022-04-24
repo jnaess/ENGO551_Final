@@ -20,6 +20,7 @@ class DatabaseManager(QueryManager, Assistant):
         QueryManager.__init__(self)
         Assistant.__init__(self)
         
+        
         self.initialize_key_values()
         
     def initialize_key_values(self):
@@ -35,4 +36,6 @@ class DatabaseManager(QueryManager, Assistant):
         self.username = 'mnonspcirnraqg' 
         self.password = '7919dd02f614cb83509e2889ec281800889dec45fb24c57db99d632e678f5626' 
         self.engine = create_engine(f'postgresql+psycopg2://{self.username}:{self.password}@{self.server}/{self.database}')
+       
+    
         
