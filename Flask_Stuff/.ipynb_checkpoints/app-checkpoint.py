@@ -28,6 +28,8 @@ from databaseManager import DatabaseManager
 
 app = Flask(__name__)
 
+
+
 #api URL
 book_api = "https://www.googleapis.com/books/v1/volumes"
 
@@ -39,9 +41,12 @@ Session(app)
 db = DatabaseManager()
 
 
+
 @app.route('/')
 def index():
     print("hi")
+    
+    
     
     return redirect("/live_feed")
 
@@ -148,6 +153,4 @@ def api_asset_locations():
 
 @app.route('/api/test', methods = ['GET'])
 def api_test():
-    print(db.get_assets_within_fields())
-
-    return "heelo world"
+    return db.get_assets_within_fields()

@@ -79,14 +79,14 @@ class QueryManager():
         Output:
         """    
 
-        geog_type ='({long} {lat})'
+        #geog_type =f'({long} {lat})'
         #geog_type = "'POINT(%s %s)'" % (long, lat)
 
 
         #self.engine.execute(f"INSERT INTO {table}\
                        #(asset_id, location) VALUES ({asset_id}, {geog_type})")
         self.engine.execute(f"INSERT INTO {table}\
-                       (asset_id, location) VALUES ({5}, {geog_type})")
+                       (asset_id, long, lat) VALUES (({5}), {long}, {lat})")
         
     def get_assets_within_fields(self):
         """
@@ -95,10 +95,6 @@ class QueryManager():
         Input:
         Output:
         """    
-       # return self.engine.execute("SELECT postgis.a_locations.id, postgis.fields.field_id\
-       #                         FROM postgis.a_locations, postgis.fields\
-       #                         WHERE ST_Contains(postgis.fields.geompoly, postgis.a_locations.geompt);")
-    
-        return pd.read_sql_query("SELECT postgis.a_locations.id, postgis.fields.field_id\
+        return self.engine.execute("SELECT postgis.a_locations.id, postgis.fields.field_id\
                                 FROM postgis.a_locations, postgis.fields\
-                                WHERE ST_Contains(postgis.fields.geompoly, postgis.a_locations.geompt);", self.engine)
+                                WHERE ST_Contains(postgis.fields.geompoly, postgis.a_locations.geompt);")
