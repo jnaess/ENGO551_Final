@@ -50,16 +50,22 @@ class QueryManager():
 
 
         coords = []
+        points_str = ""
 
         for point in poly:
+            points_str += str(point[0]) + " " + str(point[1]) + ","
             coords.append((point[1],point[0]))
-
+            
         poly_formatted = str(tuple(coords))
+        points_str = points_str[:-1]
+        print(points_str)
 
         #r1 = sg.Polygon(coords)
-        print(poly_formatted)
+    
         self.engine.execute(f"INSERT INTO {table}\
-                       (farm_id, crop_type, geometry) VALUES ('{self.farm_id}', '{crop_type}', '{poly_formatted}')")
+                       (farm_id, crop_type, points, geometry) VALUES ('{self.farm_id}', '{crop_type}', '{points_str}', '{poly_formatted}')")
+        self.engine.execute(f"UPDATE {table}\
+                        SET geompoly = ST_Transform(ST_SetSRID(ST_MakePolygon(ST_GeomFromText('LINESTRING(' || points || ')')), 4269), 3776)")
         
     def new_asset(self, asset_class, asset_name, table = '"postgis.""assets"'):
         """
