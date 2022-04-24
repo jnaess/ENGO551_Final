@@ -115,3 +115,44 @@ def process_asset(asset_name, asset_id, asset_class, lat, long):
     db.new_asset_location(asset_id, lat, long)
         
     return redirect('/asset_tracker')
+
+@app.route('/api/assets_locations', methods = ['GET'])
+def api_asset_locations():
+    start = ''
+    end = ''
+    key = ''
+    asset_id = 0
+    
+    if 'key' in request.args:
+        key = request.args['key']
+        if key == 'password':
+            #then api key is valid
+            if 'start' in request.args:
+                #DD/MM/YYYY HH:MM:SS
+                start = request.args['start']
+
+                if 'end' in request.args:
+                    #DD/MM/YYYY HH:MM:SS
+                    start = request.args['start']
+                else:
+                    #then start and end date are the same
+                    end = start
+
+            if 'asset_id' in request.args:
+                #DD/MM/YYYY HH:MM:SS
+                asset_id = int(request.args['asset_id'])
+    else:
+        return "Invalid API Key"
+
+    
+    #find which fields that an asset has been in over a given period of time
+        ##check that dates are working
+        ##check that moment in time is working
+        
+    #return as a json
+    
+    return "Hello World"
+
+@app.route('/api/test', methods = ['GET'])
+def api_test():
+    return db.get_assets_within_fields()

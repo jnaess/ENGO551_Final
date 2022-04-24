@@ -78,13 +78,28 @@ class QueryManager():
         Input:
         Output:
         """    
+<<<<<<< HEAD
        
         
         geog_type =f'({long}, {lat})'
+=======
+        geog_type ='({long} {lat})'
+>>>>>>> dd07804b73900645c4fcdf57540a85f82707b1c3
         #geog_type = "'POINT(%s %s)'" % (long, lat)
 
 
         #self.engine.execute(f"INSERT INTO {table}\
                        #(asset_id, location) VALUES ({asset_id}, {geog_type})")
         self.engine.execute(f"INSERT INTO {table}\
-                       (asset_id, location, date) VALUES ({5}, '{geog_type}', now())")
+                       (asset_id, location) VALUES ({5}, {geog_type})")
+        
+    def get_assets_within_fields(self):
+        """
+        Desc:
+            returns id's of assets within any field
+        Input:
+        Output:
+        """    
+        return self.engine.execute("SELECT a_locations.id, fields.field_id\
+                                FROM a_locations, fields\
+                                WHERE ST_Contains(fields.geompoly, a_locations.geompt);")
