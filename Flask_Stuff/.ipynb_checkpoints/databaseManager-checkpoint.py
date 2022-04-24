@@ -20,6 +20,7 @@ class DatabaseManager(QueryManager, Assistant):
         QueryManager.__init__(self)
         Assistant.__init__(self)
         
+        
         self.initialize_key_values()
         
     def initialize_key_values(self):
@@ -38,4 +39,6 @@ class DatabaseManager(QueryManager, Assistant):
         self.search_path = 'postgis, public'
         
         self.engine = create_engine(f'postgresql+psycopg2://{self.username}:{self.password}@{self.server}/{self.database}')
+       
+    
         
