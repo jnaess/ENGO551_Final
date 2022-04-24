@@ -95,6 +95,10 @@ class QueryManager():
         Input:
         Output:
         """    
-        return self.engine.execute("SELECT postgis.a_locations.id, postgis.fields.field_id\
+       # return self.engine.execute("SELECT postgis.a_locations.id, postgis.fields.field_id\
+       #                         FROM postgis.a_locations, postgis.fields\
+       #                         WHERE ST_Contains(postgis.fields.geompoly, postgis.a_locations.geompt);")
+    
+        return pd.read_sql_query("SELECT postgis.a_locations.id, postgis.fields.field_id\
                                 FROM postgis.a_locations, postgis.fields\
-                                WHERE ST_Contains(postgis.fields.geompoly, postgis.a_locations.geompt);")
+                                WHERE ST_Contains(postgis.fields.geompoly, postgis.a_locations.geompt);", self.engine)
