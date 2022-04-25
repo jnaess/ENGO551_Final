@@ -96,6 +96,7 @@ class QueryManager():
         self.engine.execute(f"INSERT INTO {table}\
                        (asset_id, long, lat) VALUES (({5}), {long}, {lat})")
         
+        
     def get_assets_within_fields(self, start = '2022-04-23 00:00:00', 
                                  end = '2022-04-25 00:00:00',
                                  field_id = 1):
