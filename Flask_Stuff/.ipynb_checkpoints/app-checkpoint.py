@@ -111,12 +111,13 @@ def process_asset(asset_name, asset_id, asset_class, lat, long):
 
 @app.route('/api/assets_locations', methods = ['GET'])
 def api_asset_locations():
-    #http://127.0.0.1:5000/api/assets_locations?start=2022-04-23%2000:00:00&end=2022-04-24%2000:00:00&field_id=1&key=password
+    #http://127.0.0.1:5000/api/assets_locations?start=2022-04-23%2000:00:00&end=2022-04-26%2000:00:00&field_type=wheat&key=password
     start = ''
     end = ''
     key = ''
     asset_id = 0
     field_id = 0
+    field_type = 'wheat'
     data = False
     
     if 'key' in request.args:
@@ -142,6 +143,9 @@ def api_asset_locations():
             if 'field_id' in request.args:
                 #int
                 field_id = int(request.args['field_id'])
+                
+            if 'field_type' in request.args:
+                field_type = request.args['field_type']
             
             print(start)
             print(end)
@@ -149,7 +153,7 @@ def api_asset_locations():
             
             data = db.get_assets_within_fields(start = start, 
                                                end = end, 
-                                               field_id = field_id)
+                                               field_type = field_type)
             
             return data.to_json()
     
