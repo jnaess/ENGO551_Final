@@ -111,6 +111,7 @@ def process_asset(asset_name, asset_id, asset_class, lat, long):
 
 @app.route('/api/assets_locations', methods = ['GET'])
 def api_asset_locations():
+    #http://127.0.0.1:5000/api/assets_locations?start=2022-04-23%2000:00:00&end=2022-04-24%2000:00:00&field_id=1&key=password
     start = ''
     end = ''
     key = ''
