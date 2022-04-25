@@ -152,7 +152,7 @@ def api_asset_locations():
                                                field_id = field_id)
             
             return data.to_json()
-    else:
+    
         return "Invalid API Key"
 
     
