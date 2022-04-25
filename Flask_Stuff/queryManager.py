@@ -94,11 +94,12 @@ class QueryManager():
         
         ts = time.time()
         timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+        print(int(asset_id))
 
         #self.engine.execute(f"INSERT INTO {table}\
                        #(asset_id, location) VALUES ({asset_id}, {geog_type})")
         self.engine.execute(f"INSERT INTO {table}\
-                       (asset_id, date,  long, lat) VALUES (({5}), '{timestamp}', {long}, {lat})")
+                       (asset_id, date,  long, lat) VALUES (( {int(7.6)} ), '{timestamp}', {long}, {lat})")
         self.engine.execute(f"UPDATE {table} SET geompt = ST_Transform(ST_SetSRID(ST_MakePoint(long, lat), 4269), 3776)")
         
         
