@@ -76,11 +76,10 @@ class QueryManager():
         Input:
         Output:
         """    
-        ts = time.time()
-        timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+
         
         self.engine.execute(f"INSERT INTO {table}\
-                       (farm_id, name, class, date) VALUES ('{self.farm_id}', '{asset_name}', '{asset_class}', {timestamp})")
+                       (farm_id, name, class) VALUES ('{self.farm_id}', '{asset_name}', '{asset_class}')")
         
     def new_asset_location(self, asset_id, lat, long, table = '"postgis"."asset_locations"'):
         """
@@ -92,17 +91,20 @@ class QueryManager():
 
         #geog_type =f'({long} {lat})'
         #geog_type = "'POINT(%s %s)'" % (long, lat)
-
+        
+        ts = time.time()
+        timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
         #self.engine.execute(f"INSERT INTO {table}\
                        #(asset_id, location) VALUES ({asset_id}, {geog_type})")
         self.engine.execute(f"INSERT INTO {table}\
-                       (asset_id, long, lat) VALUES (({5}), {long}, {lat})")
+                       (asset_id, date,  long, lat) VALUES (({5}), '{timestamp}', {long}, {lat})")
+        self.engine.execute(f"UPDATE {table} SET geompt = ST_Transform(ST_SetSRID(ST_MakePoint(long, lat), 4269), 3776)")
         
         
     def get_assets_within_fields(self, start = '2022-04-23 00:00:00', 
-                                 end = '2022-04-25 00:00:00',
-                                 field_id = 1,
+                                 end = '2022-04-26 00:00:00',
+                                 field_id = 2,
                                 field_type = 'beans'):
         """
         Desc:
@@ -110,8 +112,8 @@ class QueryManager():
         Input:
         Output:
         """        
-        return pd.read_sql_query(f"SELECT a_locations.id\
-                                FROM postgis.a_locations, postgis.fields\
-                                WHERE class = {field_type} \
+        return pd.read_sql_query(f"SELECT asset_locations.asset_id\
+                                FROM asset_locations, fields\
+                                WHERE crop_type = '{field_type}' \
                                         AND date BETWEEN '{start}'::timestamp AND '{end}'::timestamp \
-                                        AND ST_Contains(geompoly, geompt);", self.engine)
+                                        AND ST_Contains(fields.geompoly, asset_locations.geompt);", self.engine)
