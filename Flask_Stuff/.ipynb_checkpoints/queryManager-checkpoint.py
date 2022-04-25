@@ -76,8 +76,11 @@ class QueryManager():
         Input:
         Output:
         """    
+        ts = time.time()
+        timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+        
         self.engine.execute(f"INSERT INTO {table}\
-                       (farm_id, name, class) VALUES ('{self.farm_id}', '{asset_name}', '{asset_class}')")
+                       (farm_id, name, class, date) VALUES ('{self.farm_id}', '{asset_name}', '{asset_class}', {timestamp})")
         
     def new_asset_location(self, asset_id, lat, long, table = '"postgis"."asset_locations"'):
         """
