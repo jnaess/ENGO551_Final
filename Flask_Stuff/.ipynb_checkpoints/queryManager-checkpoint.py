@@ -105,7 +105,8 @@ class QueryManager():
         
     def get_assets_within_fields(self, start = '2022-04-23 00:00:00', 
                                  end = '2022-04-26 00:00:00',
-                                 field_id = 2):
+                                 field_id = 2,
+                                field_type = 'beans'):
         """
         Desc:
             returns id's of assets within any field
@@ -114,6 +115,6 @@ class QueryManager():
         """        
         return pd.read_sql_query(f"SELECT asset_locations.asset_id\
                                 FROM asset_locations, fields\
-                                WHERE field_id = {field_id} \
+                                WHERE crop_type = '{field_type}' \
                                         AND date BETWEEN '{start}'::timestamp AND '{end}'::timestamp \
                                         AND ST_Contains(fields.geompoly, asset_locations.geompt);", self.engine)
