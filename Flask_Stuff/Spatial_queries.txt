@@ -10,12 +10,12 @@ SELECT AddGeometryColumn('postgis', 'asset_locations', 'geompt', 3776, 'POINT', 
 
 -- Create geometry from lat, lon double precision 
 -- EPSG 4269 is NAD83 geodetic coords, EPSG 3776 is NAD83 / Alberta 3TM ref merid 114 W
-UPDATE "postgis"."asset_locations" SET geompt = ST_Transform(ST_SetSRID(ST_MakePoint(longitude, latitude), 4269), 3776);
+UPDATE "postgis"."asset_locations" SET geompt = ST_Transform(ST_SetSRID(ST_MakePoint(long, lat), 4269), 3776);
 
 
 
 -- Create new polygon geometry coulmn for fields
-SELECT AddGeometryColumn('postgis', 'feilds', 'geompoly', 3776,
+SELECT AddGeometryColumn('postgis', 'fields', 'geompoly', 3776,
 'POLYGON', 2);
 
 -- Create geometries from the 4 vertices
@@ -31,3 +31,33 @@ WHERE ST_Contains(fields.geompoly, asset_locations.geompt);
 
 
 
+
+
+-- Reinitit database
+CREATE TABLE asset_locations(
+asset_id integer NOT NULL,
+date timestamp,
+long double precision,
+lat double precision);
+
+SELECT AddGeometryColumn('postgis', 'asset_locations', 'geompt', 3776,
+'POINT', 2);
+
+
+
+
+CREATE TABLE fields (
+farm_id integer,
+field_id SERIAL,
+crop_type character varying,
+points text);
+
+SELECT AddGeometryColumn('postgis', 'fields', 'geompoly', 3776,
+'POLYGON', 2);
+
+
+CREATE TABLE assets(
+farm_id integer,
+asset_id serial,
+name character varying,
+class character varying);

@@ -50,16 +50,22 @@ class QueryManager():
 
 
         coords = []
+        points_str = ""
 
         for point in poly:
+            points_str += str(point[0]) + " " + str(point[1]) + ","
             coords.append((point[1],point[0]))
-
+            
         poly_formatted = str(tuple(coords))
+        points_str = points_str[:-1]
+        print(points_str)
 
         #r1 = sg.Polygon(coords)
-        print(poly_formatted)
+    
         self.engine.execute(f"INSERT INTO {table}\
-                       (farm_id, crop_type, geometry) VALUES ('{self.farm_id}', '{crop_type}', '{poly_formatted}')")
+                       (farm_id, crop_type, points, geometry) VALUES ('{self.farm_id}', '{crop_type}', '{points_str}', '{poly_formatted}')")
+        self.engine.execute(f"UPDATE {table}\
+                        SET geompoly = ST_Transform(ST_SetSRID(ST_MakePolygon(ST_GeomFromText('LINESTRING(' || points || ')')), 4269), 3776)")
         
     def new_asset(self, asset_class, asset_name, table = '"postgis.""assets"'):
         """
@@ -79,14 +85,14 @@ class QueryManager():
         Output:
         """    
 
-        geog_type ='({long} {lat})'
+        #geog_type =f'({long} {lat})'
         #geog_type = "'POINT(%s %s)'" % (long, lat)
 
 
         #self.engine.execute(f"INSERT INTO {table}\
                        #(asset_id, location) VALUES ({asset_id}, {geog_type})")
         self.engine.execute(f"INSERT INTO {table}\
-                       (asset_id, location) VALUES ({5}, {geog_type})")
+                       (asset_id, long, lat) VALUES (({5}), {long}, {lat})")
         
     def get_assets_within_fields(self, start = '2022-04-23 00:00:00', 
                                  end = '2022-04-25 00:00:00',
@@ -97,6 +103,7 @@ class QueryManager():
         Input:
         Output:
         """    
+<<<<<<< HEAD
        # return self.engine.execute("SELECT postgis.a_locations.id, postgis.fields.field_id\
        #                         FROM postgis.a_locations, postgis.fields\
        #                         WHERE ST_Contains(postgis.fields.geompoly, postgis.a_locations.geompt);")
@@ -106,3 +113,8 @@ class QueryManager():
                                 WHERE field_id = {field_id} \
                                         AND date BETWEEN '{start}'::timestamp AND '{end}'::timestamp \
                                         AND ST_Contains(geompoly, geompt);", self.engine)
+=======
+        return self.engine.execute("SELECT postgis.a_locations.id, postgis.fields.field_id\
+                                FROM postgis.a_locations, postgis.fields\
+                                WHERE ST_Contains(postgis.fields.geompoly, postgis.a_locations.geompt);")
+>>>>>>> 4c4f2381b2a9bdcc7a0073197bfb92fe8a0dac99
