@@ -25,7 +25,7 @@ class QueryManager():
         """
         return pd.read_sql_query(f'''SELECT * FROM {table} ''', self.engine)
     
-    def fields_all(self, table = '"postgis"."fields"'):
+    def fields_all(self, table = "fields"):
         """
         Desc:
             querry to reteive all rows from the simulations table
@@ -88,7 +88,9 @@ class QueryManager():
         self.engine.execute(f"INSERT INTO {table}\
                        (asset_id, location) VALUES ({5}, {geog_type})")
         
-    def get_assets_within_fields(self):
+    def get_assets_within_fields(self, start = '2022-04-23 00:00:00', 
+                                 end = '2022-04-25 00:00:00',
+                                 field_id = 1):
         """
         Desc:
             returns id's of assets within any field
@@ -99,6 +101,8 @@ class QueryManager():
        #                         FROM postgis.a_locations, postgis.fields\
        #                         WHERE ST_Contains(postgis.fields.geompoly, postgis.a_locations.geompt);")
     
-        return pd.read_sql_query("SELECT postgis.a_locations.id, postgis.fields.field_id\
+        return pd.read_sql_query(f"SELECT a_locations.id\
                                 FROM postgis.a_locations, postgis.fields\
-                                WHERE ST_Contains(postgis.fields.geompoly, postgis.a_locations.geompt);", self.engine)
+                                WHERE field_id = {field_id} \
+                                        AND date BETWEEN '{start}'::timestamp AND '{end}'::timestamp \
+                                        AND ST_Contains(geompoly, geompt);", self.engine)

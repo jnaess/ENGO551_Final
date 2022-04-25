@@ -148,6 +148,6 @@ def api_asset_locations():
 
 @app.route('/api/test', methods = ['GET'])
 def api_test():
-    print(db.get_assets_within_fields())
+    stuff = db.get_assets_within_fields()
 
-    return "heelo world"
+    return stuff.to_json()

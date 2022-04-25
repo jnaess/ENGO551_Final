@@ -115,6 +115,7 @@ def api_asset_locations():
     end = ''
     key = ''
     asset_id = 0
+    field_id = 0
     
     if 'key' in request.args:
         key = request.args['key']
@@ -126,7 +127,7 @@ def api_asset_locations():
 
                 if 'end' in request.args:
                     #DD/MM/YYYY HH:MM:SS
-                    start = request.args['start']
+                    end = request.args['end']
                 else:
                     #then start and end date are the same
                     end = start
@@ -134,6 +135,10 @@ def api_asset_locations():
             if 'asset_id' in request.args:
                 #DD/MM/YYYY HH:MM:SS
                 asset_id = int(request.args['asset_id'])
+                
+            if 'field_id' in request.args:
+                #DD/MM/YYYY HH:MM:SS
+                field_id = int(request.args['field_id'])
     else:
         return "Invalid API Key"
 
@@ -148,6 +153,6 @@ def api_asset_locations():
 
 @app.route('/api/test', methods = ['GET'])
 def api_test():
-    print(db.get_assets_within_fields())
+    stuff = db.get_assets_within_fields()
 
-    return "heelo world"
+    return stuff.to_json()
