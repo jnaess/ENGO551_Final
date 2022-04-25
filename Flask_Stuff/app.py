@@ -95,7 +95,7 @@ def asset_tracker():
     return render_template("asset_tracker.html")
 
 
-@app.route('/process_asset/<string:asset_name>/<string:asset_class>/<string:asset_id>/<string:lat>/<string:long>', methods=['POST'])
+@app.route('/process_asset/<string:asset_name>/<string:asset_class>/<int:asset_id>/<string:lat>/<string:long>', methods=['POST'])
 def process_asset(asset_name, asset_id, asset_class, lat, long):
     
     #adds a new asset location   
