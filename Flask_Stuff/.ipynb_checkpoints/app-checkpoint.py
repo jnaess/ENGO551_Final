@@ -95,7 +95,7 @@ def asset_tracker():
     return render_template("asset_tracker.html")
 
 
-@app.route('/process_asset/<string:asset_name>/<string:asset_class>/<int:asset_id>/<string:lat>/<string:long>', methods=['POST'])
+@app.route('/process_asset/<string:asset_name>/<string:asset_class>/<asset_id>/<string:lat>/<string:long>', methods=['POST'])
 def process_asset(asset_name, asset_id, asset_class, lat, long):
     
     #adds a new asset location   
@@ -111,7 +111,7 @@ def process_asset(asset_name, asset_id, asset_class, lat, long):
 
 @app.route('/api/assets_locations', methods = ['GET'])
 def api_asset_locations():
-    #http://127.0.0.1:5000/api/assets_locations?start=2022-04-23%2000:00:00&end=2022-04-26%2000:00:00&field_type=wheat&key=password
+    #http://127.0.0.1:5000/api/assets_locations?start=2022-04-23%2000:00:00&end=2022-04-26%2000:00:00&field_type=beans&key=password
     start = ''
     end = ''
     key = ''
