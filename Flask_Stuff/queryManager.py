@@ -102,19 +102,9 @@ class QueryManager():
             returns id's of assets within any field
         Input:
         Output:
-        """    
-#<<<<<<< HEAD
-       # return self.engine.execute("SELECT postgis.a_locations.id, postgis.fields.field_id\
-       #                         FROM postgis.a_locations, postgis.fields\
-       #                         WHERE ST_Contains(postgis.fields.geompoly, postgis.a_locations.geompt);")
-    
+        """        
         return pd.read_sql_query(f"SELECT a_locations.id\
                                 FROM postgis.a_locations, postgis.fields\
                                 WHERE field_id = {field_id} \
                                         AND date BETWEEN '{start}'::timestamp AND '{end}'::timestamp \
                                         AND ST_Contains(geompoly, geompt);", self.engine)
-#=======
-#        return self.engine.execute("SELECT postgis.a_locations.id, postgis.fields.field_id\
-#                                FROM postgis.a_locations, postgis.fields\
-#                                WHERE ST_Contains(postgis.fields.geompoly, postgis.a_locations.geompt);")
-#>>>>>>> 4c4f2381b2a9bdcc7a0073197bfb92fe8a0dac99

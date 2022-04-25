@@ -28,8 +28,6 @@ from databaseManager import DatabaseManager
 
 app = Flask(__name__)
 
-
-
 #api URL
 book_api = "https://www.googleapis.com/books/v1/volumes"
 
@@ -41,12 +39,9 @@ Session(app)
 db = DatabaseManager()
 
 
-
 @app.route('/')
 def index():
     print("hi")
-    
-    
     
     return redirect("/live_feed")
 
@@ -121,6 +116,7 @@ def api_asset_locations():
     key = ''
     asset_id = 0
     field_id = 0
+    data = False
     
     if 'key' in request.args:
         key = request.args['key']
@@ -129,6 +125,7 @@ def api_asset_locations():
             if 'start' in request.args:
                 #DD/MM/YYYY HH:MM:SS
                 start = request.args['start']
+                
 
                 if 'end' in request.args:
                     #DD/MM/YYYY HH:MM:SS
@@ -138,12 +135,22 @@ def api_asset_locations():
                     end = start
 
             if 'asset_id' in request.args:
-                #DD/MM/YYYY HH:MM:SS
+                #is not used
                 asset_id = int(request.args['asset_id'])
                 
             if 'field_id' in request.args:
-                #DD/MM/YYYY HH:MM:SS
+                #int
                 field_id = int(request.args['field_id'])
+            
+            print(start)
+            print(end)
+            print(field_id)
+            
+            data = db.get_assets_within_fields(start = start, 
+                                               end = end, 
+                                               field_id = field_id)
+            
+            return data.to_json()
     else:
         return "Invalid API Key"
 
@@ -158,10 +165,6 @@ def api_asset_locations():
 
 @app.route('/api/test', methods = ['GET'])
 def api_test():
-<<<<<<< HEAD
     stuff = db.get_assets_within_fields()
 
     return stuff.to_json()
-=======
-    return db.get_assets_within_fields()
->>>>>>> 4c4f2381b2a9bdcc7a0073197bfb92fe8a0dac99
