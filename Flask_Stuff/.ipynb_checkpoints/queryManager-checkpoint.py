@@ -67,7 +67,7 @@ class QueryManager():
         self.engine.execute(f"UPDATE {table}\
                         SET geompoly = ST_Transform(ST_SetSRID(ST_MakePolygon(ST_GeomFromText('LINESTRING(' || points || ')')), 4269), 3776)")
         
-    def new_asset(self, asset_class, asset_name, table = '"postgis.""assets"'):
+    def new_asset(self, asset_class, asset_name, table = '"postgis"."assets"'):
         """
         Desc:
             Inserts a new field with a given crop type
@@ -88,9 +88,13 @@ class QueryManager():
         """    
         ts = time.time()
         timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-        
+
+
+        #self.engine.execute(f"INSERT INTO {table}\
+                       #(asset_id, location) VALUES ({asset_id}, {geog_type})")
+
         self.engine.execute(f"INSERT INTO {table}\
-                       (asset_id, date,  long, lat) VALUES ({asset_id} , '{timestamp}', {long}, {lat})")
+                       (asset_id, date,  long, lat) VALUES (( {int(7.6)} ), '{timestamp}', {long}, {lat})")
         self.engine.execute(f"UPDATE {table} SET geompt = ST_Transform(ST_SetSRID(ST_MakePoint(long, lat), 4269), 3776)")
         
         
