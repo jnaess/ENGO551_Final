@@ -61,8 +61,6 @@ class QueryManager():
         poly_formatted = str(tuple(coords))
         points_str = points_str[:-1]
         print(points_str)
-
-        #r1 = sg.Polygon(coords)
     
         self.engine.execute(f"INSERT INTO {table}\
                        (farm_id, crop_type, points, geometry) VALUES ('{self.farm_id}', '{crop_type}', '{points_str}', '{poly_formatted}')")
@@ -88,17 +86,9 @@ class QueryManager():
         Input:
         Output:
         """    
-
-        #geog_type =f'({long} {lat})'
-        #geog_type = "'POINT(%s %s)'" % (long, lat)
-        
         ts = time.time()
         timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         
-        
-
-        #self.engine.execute(f"INSERT INTO {table}\
-                       #(asset_id, location) VALUES ({asset_id}, {geog_type})")
         self.engine.execute(f"INSERT INTO {table}\
                        (asset_id, date,  long, lat) VALUES ({asset_id} , '{timestamp}', {long}, {lat})")
         self.engine.execute(f"UPDATE {table} SET geompt = ST_Transform(ST_SetSRID(ST_MakePoint(long, lat), 4269), 3776)")
