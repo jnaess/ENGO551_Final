@@ -66,8 +66,6 @@ def asset_management():
     #load all current assets
     assets = db.select_all("assets")
     
-    print(assets)
-    print(assets.iterrows())
     return render_template("asset_management.html", assets = assets)
 
 @app.route('/new_asset', methods=["GET", "POST"])
@@ -82,7 +80,6 @@ def new_asset():
         #add new asset to database
         db.new_asset(asset_class, asset_name)
         
-    
     return redirect('/asset_management')
 
 @app.route('/live_feed')
@@ -97,13 +94,6 @@ def asset_tracker():
 
 @app.route('/process_asset/<string:asset_name>/<string:asset_class>/<asset_id>/<string:lat>/<string:long>', methods=['POST'])
 def process_asset(asset_name, asset_id, asset_class, lat, long):
-    
-    #adds a new asset location   
-    #asset_name = request.form.get("asset_name")
-    #asset_id = request.form.get("asset_id")
-    #asset_class = request.form.get("asset_class")
-    #lat = request.form.get("lat")
-    #long = request.form.get("long")
         
     db.new_asset_location(asset_id, lat, long)
         
